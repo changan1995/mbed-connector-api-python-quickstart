@@ -10,41 +10,41 @@ This project is used to practice the usage of mbed OS, python, js and promote un
 And probably will be used as one of the mbed IOT course.
 So if you are interested in ARM University Course, do check the program.
 # realization
-## 1.how to use
+## How to use
 code listed here serves as the framework for localhost server through ARM Connector Service.So you should probably check the 
 client (mbed OS client):
 https://github.com/changan1995/mbed-os-example-client/tree/update_addon_acc%26mag
-## 2.how to wcode
+## How to wcode
 this code is mainly made up of two part.
-### app.py
+### App.py
 serve as the back end of the project.
 if you wish to add one resource,just create one more @socketio.on(‘post_from_front_end’)
 and followed the template listed there
-### index.hbs
+### Index.hbs
 serve as the front end of the project.
 by adding code below respectively to html part and js part.
-#### control button
+#### Control button
 `
               <button class="get-accel">GET ACCEL</button>
 `
-#### display
+#### Display
 `
              <h4>accelerometer:<span class="acc-value">unknown</span></h4>
 `
-#### respond to the click of button
+#### Respond to the click of button
 ` _this.find('.get-accel').on('click', function() {
             socket.emit('get_accel',{
               endpointName: _this.attr('id')
             });
           });
 `
-#### change the display part
+#### Change the display part
 ` socket.on('accel', function (data) {
           console.log('accel', data);
           $('#' + data.endpointName + ' .acc-value').html(data.value);
         });
 `
-#run
+# Run
 
 then you can run the cmd by
 `
