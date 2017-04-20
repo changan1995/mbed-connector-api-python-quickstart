@@ -1,5 +1,5 @@
 # update_addon_acc&mag
-##prevision
+## Prevision
 
 ![out come](http://wx3.sinaimg.cn/mw690/4b7a5121gy1fet44rh5cuj21h60n8te5.jpg)
 
@@ -44,5 +44,13 @@ by adding code below respectively to html part and js part.
           $('#' + data.endpointName + ' .acc-value').html(data.value);
         });
 `
-then you can 
-``
+#run
+
+then you can run the cmd by
+`
+python path\app.py
+`
+and open the browser check the 
+`
+localhost:8080
+`
