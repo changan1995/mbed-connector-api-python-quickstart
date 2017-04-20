@@ -18,7 +18,7 @@ https://github.com/changan1995/mbed-os-example-client/tree/update_addon_acc%26ma
 this code is mainly made up of two part.
 ### App.py
 serve as the back end of the project.
-if you wish to add one resource,just create one more @socketio.on(‘post_from_front_end’)
+if you wish to add one resource,just create one more ` @socketio.on(‘post_from_front_end’)`
 and followed the template listed there
 ### Index.hbs
 serve as the front end of the project.
