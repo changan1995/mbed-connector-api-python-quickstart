@@ -40,8 +40,10 @@
           <div class="row">
             <div class="small-12 medium-6 columns">
               <h4>Presses: <span class="presses-value">Unknown</span></h4>
+              <h4>accelerometer:<span class="acc-value">unknown</span></h4>
               <label><input type="checkbox" class="subscribe-presses"> Subscribe</label>
               <button class="get-presses">GET</button>
+              <button class="get-accel">GET ACCEL</button>
             </div>
             <div class="small-12 medium-6 columns">
               <h4>LED Blink Pattern</h4>
@@ -92,6 +94,12 @@
             });
           });
 
+          _this.find('.get-accel').on('click', function() {
+            socket.emit('get_accel',{
+              endpointName: _this.attr('id')
+            });
+          });
+
           _this.find('.blink-pattern').bind('input', function() {
             _this.find('.update-blink-pattern').addClass('active');
           })
@@ -116,6 +124,13 @@
         socket.on('presses', function (data) {
           console.log('presses', data);
           $('#' + data.endpointName + ' .presses-value').html(data.value);
+        });
+ 
+        
+        //adding the accelerometer socket.on
+        socket.on('accel', function (data) {
+          console.log('accel', data);
+          $('#' + data.endpointName + ' .acc-value').html(data.value);
         });
 
         socket.on('subscribed-to-presses', function (data) {
