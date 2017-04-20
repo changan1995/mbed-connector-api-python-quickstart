@@ -11,7 +11,7 @@ socketio = SocketIO(app,async_mode='threading')
 if 'ACCESS_KEY' in os.environ.keys():
 	token = os.environ['ACCESS_KEY'] # get access key from environment variable
 else:
-	token = "ChangeMe" # replace with your API token
+	token = "HnVM43cliPg7G7M2yre0CF9jp0soRt43QEqLGHe8XOkTtwGdrstvbUmyHbO5tzprhoEotXAU4r8bjTD19Iwq7HfBej0mqkTLSH8n" # replace with your API token
 
 connector = mbed_connector_api.connector(token)
 
@@ -81,6 +81,20 @@ def getPresses(data):
 		data_to_emit = {"endpointName":data['endpointName'],"value":e.result}
 		print data_to_emit
 		emit('presses', data_to_emit)
+
+@socketio.on('get_accel')
+def getaccel(data):
+	# read data frome get resource /6666/0/5501 (accel)
+	print("get_accel",data)
+	e = connector.getResourceValue(data['endpointName'],"/6666/0/5501")
+	while not e.isDone():
+		None
+	if e.error:
+		print("Error:",e.error.errType, e.error.error, e.raw_data)
+	else:
+		data_to_emit = {"endpointName":data['endpointName'],"value":e.result}
+		print data_to_emit
+		emit('accel',data_to_emit)
     
 @socketio.on('update_blink_pattern')
 def updateBlinkPattern(data):
