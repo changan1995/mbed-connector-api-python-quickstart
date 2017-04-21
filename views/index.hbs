@@ -42,6 +42,7 @@
               <h4>Presses: <span class="presses-value">Unknown</span></h4>
               <h4>accelerometer:<span class="acc-value">unknown</span></h4>
               <label><input type="checkbox" class="subscribe-presses"> Subscribe</label>
+              <label><input type="checkbox" class="subscribe-accel">subscribe to accel</label>
               <button class="get-presses">GET</button>
               <button class="get-accel">GET ACCEL</button>
             </div>
@@ -88,10 +89,25 @@
             }
           });
 
-          _this.find('.get-presses').on('click', function() {
+                 _this.find('.get-presses').on('click', function() {
             socket.emit('get_presses', {
               endpointName: _this.attr('id')
             });
+          });
+
+          //adding the subscription to accelerometer &manual get 
+         _this.find('.subscribe-accel').change(function() {
+            if ($(this).is(":checked")) {
+              _this.find('.get-accel').prop('disabled', true);
+              socket.emit('subscribe_to_accel', {
+                endpointName: _this.attr('id')
+              });
+            } else {
+              _this.find('.get-accel').prop('disabled', false);
+              socket.emit('unsubscribe_to_accel', {
+                endpointName: _this.attr('id')
+              });
+            }
           });
 
           _this.find('.get-accel').on('click', function() {
@@ -133,6 +149,14 @@
           $('#' + data.endpointName + ' .acc-value').html(data.value);
         });
 
+        socket.on('subscribed-to-accel', function (data) {
+          console.log('subscribed-to-accel', data);
+        });
+
+        socket.on('unsubscribed-to-accel', function (data) {
+          console.log('unsubscribed-to-accel', data);
+        });
+
         socket.on('subscribed-to-presses', function (data) {
           console.log('subscribed-to-presses', data);
         });
@@ -140,6 +164,8 @@
         socket.on('unsubscribed-to-presses', function (data) {
           console.log('unsubscribed-to-presses', data);
         });
+
+
 
       });
     </script>
