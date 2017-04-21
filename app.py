@@ -67,7 +67,33 @@ def unsubscribeToPresses(data):
 	else:
 		print("Unsubscribed Successfully!")
 	emit('unsubscribed-to-presses',{"endpointName":data['endpointName'],"value":'True'})
-    
+
+
+@socketio.on('subscribe_to_accel')
+def subscribeToPresses(data):
+	# Subscribe to all changes of resource /3200/0/5501 (button presses)
+	print('subscribe_to_accel: ',data)
+	e = connector.putResourceSubscription(data['endpointName'],'/6666/0/5501')
+	while not e.isDone():
+		None
+	if e.error:
+		print("Error: ",e.error.errType, e.error.error, e.raw_data)
+	else:
+		print("Subscribed Successfully!")
+		emit('subscribed-to-accel')
+
+@socketio.on('unsubscribe_to_accel')
+def unsubscribeToPresses(data):
+	print('unsubscribe_to_accel: ',data)
+	e = connector.deleteResourceSubscription(data['endpointName'],'/6666/0/5501')
+	while not e.isDone():
+		None
+	if e.error:
+		print("Error: ",e.error.errType, e.error.error, e.raw_data)
+	else:
+		print("Unsubscribed Successfully!")
+	emit('unsubscribed-to-accel',{"endpointName":data['endpointName'],"value":'True'})
+
 @socketio.on('get_presses')
 def getPresses(data):
 	# Read data from GET resource /3200/0/5501 (num button presses)
@@ -81,7 +107,8 @@ def getPresses(data):
 		data_to_emit = {"endpointName":data['endpointName'],"value":e.result}
 		print data_to_emit
 		emit('presses', data_to_emit)
-
+ 
+# this part of adding accel should be ok already
 @socketio.on('get_accel')
 def getaccel(data):
 	# read data frome get resource /6666/0/5501 (accel)
@@ -124,8 +151,12 @@ def notificationHandler(data):
 	notifications = data['notifications']
 	for thing in notifications:
 		stuff = {"endpointName":thing["ep"],"value":b64decode(thing["payload"])}
-		print "Emitting :",stuff
-		socketio.emit('presses',stuff)
+		if "/6666/0/5501" in data['notifications']:
+			print "Emitting :",stuff
+			socketio.emit('accel',stuff)
+		else:
+			print "Emitting :",stuff
+			socketio.emit('presses',stuff)
 
 if __name__ == "__main__":
 	connector.deleteAllSubscriptions()							# remove all subscriptions, start fresh
