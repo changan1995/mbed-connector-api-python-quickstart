@@ -68,6 +68,7 @@ def unsubscribeToPresses(data):
 		print("Unsubscribed Successfully!")
 	emit('unsubscribed-to-presses',{"endpointName":data['endpointName'],"value":'True'})
 
+	
 
 @socketio.on('subscribe_to_accel')
 def subscribeToPresses(data):
